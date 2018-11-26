@@ -48,7 +48,13 @@ int main (int argc, char *argv[])
   //GtkWidget *en_fahr = NULL;
 
   GtkWidget *win = NULL;
+  GtkWidget *vbox;
   GtkWidget *fixed = NULL;
+
+  GtkWidget *menubar;
+  GtkWidget *file;
+  GtkWidget *file_menu;
+  GtkWidget *file_quit;
 
   /* Initialize GTK+ */
   g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, (GLogFunc) gtk_false, NULL);
@@ -64,9 +70,24 @@ int main (int argc, char *argv[])
   gtk_widget_realize (win);
   g_signal_connect (win, "destroy", gtk_main_quit, NULL);
 
+  vbox = gtk_vbox_new(FALSE,0);
+  gtk_container_add(GTK_CONTAINER(win), vbox);
+
+
+
+  menubar = gtk_menu_bar_new();
+  file_menu = gtk_menu_new();
+
+  file = gtk_menu_item_new_with_label("File");
+  file_quit = gtk_menu_item_new_with_label("Quit");
+
+  gtk_menu_item_set_submenu(GTK_MENU_ITEM(file), file_menu);
+  gtk_menu_shell_append(GTK_MENU_SHELL(file_menu), file_quit);
+  gtk_menu_shell_append(GTK_MENU_SHELL(menubar), file);
+  gtk_box_pack_start(GTK_BOX(vbox), menubar, FALSE, FALSE, 0);
   /* Create a vertical box with buttons */
   fixed = gtk_fixed_new ();
-  gtk_container_add (GTK_CONTAINER (win), fixed);
+  gtk_container_add (GTK_CONTAINER (vbox), fixed);
 
   lb_celsius = gtk_label_new("CELSIUS");
   gtk_fixed_put(GTK_FIXED(fixed),lb_celsius, 10, 10);
