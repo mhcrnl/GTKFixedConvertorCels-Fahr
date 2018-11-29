@@ -2,8 +2,10 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <glib.h>
+#include <locale.h>
 
 #define max 30
+#define GETTEXT_PACKAGE "gtk20"
 
 const char *title = "Convertor Celsius to Fahrenheit";
 const char *authors[] = {"Mihai Cornel", NULL};
@@ -81,7 +83,10 @@ int main (int argc, char *argv[])
   GtkWidget *help_about;
   GtkWidget *help_item;
 
-  //setlocale(LC_ALL, "");
+  setlocale(LC_ALL, "");
+  //bindtextdomain(GETTEXT_PACKAGE, DATADIR "/locale");
+  bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+  textdomain(GETTEXT_PACKAGE);
   /* Initialize GTK+ */
   g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, (GLogFunc) gtk_false, NULL);
   gtk_init (&argc, &argv);
@@ -106,8 +111,8 @@ int main (int argc, char *argv[])
   help_menu = gtk_menu_new();
 
 
-  file = gtk_menu_item_new_with_label("File");
-  file_quit = gtk_menu_item_new_with_label("Quit");
+  file = gtk_menu_item_new_with_label(_("File"));
+  file_quit = gtk_menu_item_new_with_label(_("Quit"));
 
   help_item = gtk_menu_item_new_with_label("Help");
   help_about = gtk_menu_item_new_with_label("About");
