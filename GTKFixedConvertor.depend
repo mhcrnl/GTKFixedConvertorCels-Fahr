@@ -1,7 +1,9 @@
 # depslib dependency file v1.0
-1543256812 source:/home/mhcrnl/Desktop/2018Noe17/GTKFixedConvertor/main.c
+1543458609 source:/home/mhcrnl/Desktop/2018Noe17/GTKFixedConvertor/main.c
 	<stdlib.h>
 	<gtk/gtk.h>
+	<glib/gi18n.h>
+	<glib.h>
 
 1521865377 /usr/include/gtk-2.0/gtk/gtk.h
 	<gdk/gdk.h>
@@ -2550,4 +2552,9 @@
 
 1521865377 /usr/include/gtk-2.0/gtk/gtktipsquery.h
 	<gtk/gtk.h>
+
+1537979759 /usr/include/glib-2.0/glib/gi18n.h
+	<glib.h>
+	<libintl.h>
+	<string.h>
 

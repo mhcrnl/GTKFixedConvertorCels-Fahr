@@ -1,10 +1,22 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
+#include <glib.h>
 
 #define max 30
 
+const char *title = "Convertor Celsius to Fahrenheit";
+const char *authors[] = {"Mihai Cornel", NULL};
+const char *license = "GPLv3";
+
 GtkWidget *en_fahr = NULL;
 const gchar *en_celsius_text = NULL;
+/*
+*   FUNCTIONS:
+*/
+static void my_func(GtkWidget* widget, GtkWidget *entry);
+static void helloWorld(GtkWidget *wid, GtkWidget *win);
+static void about_show(void);
 
 static void my_func(GtkWidget *widget, GtkWidget *entry)
 {
@@ -25,6 +37,15 @@ static void helloWorld (GtkWidget *wid, GtkWidget *win)
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
+}
+
+static void about_show(void)
+{
+	GtkWidget * about_dialog = gtk_about_dialog_new();
+	gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(about_dialog), authors);
+	gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(about_dialog), license);
+	gtk_dialog_run(GTK_DIALOG(about_dialog));
+	gtk_widget_destroy(about_dialog);
 }
 
 float celsius(float cels)
@@ -56,6 +77,11 @@ int main (int argc, char *argv[])
   GtkWidget *file_menu;
   GtkWidget *file_quit;
 
+  GtkWidget *help_menu;
+  GtkWidget *help_about;
+  GtkWidget *help_item;
+
+  //setlocale(LC_ALL, "");
   /* Initialize GTK+ */
   g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, (GLogFunc) gtk_false, NULL);
   gtk_init (&argc, &argv);
@@ -64,7 +90,7 @@ int main (int argc, char *argv[])
   /* Create the main window */
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_container_set_border_width (GTK_CONTAINER (win), 8);
-  gtk_window_set_title (GTK_WINDOW (win), "Convertor Celsius to Fahrenheit");
+  gtk_window_set_title (GTK_WINDOW (win), title);
   gtk_window_set_default_size(GTK_WINDOW(win), 400, 200);
   gtk_window_set_position (GTK_WINDOW (win), GTK_WIN_POS_CENTER);
   gtk_widget_realize (win);
@@ -77,13 +103,24 @@ int main (int argc, char *argv[])
 
   menubar = gtk_menu_bar_new();
   file_menu = gtk_menu_new();
+  help_menu = gtk_menu_new();
+
 
   file = gtk_menu_item_new_with_label("File");
   file_quit = gtk_menu_item_new_with_label("Quit");
 
+  help_item = gtk_menu_item_new_with_label("Help");
+  help_about = gtk_menu_item_new_with_label("About");
+
   gtk_menu_item_set_submenu(GTK_MENU_ITEM(file), file_menu);
+  gtk_menu_item_set_submenu(GTK_MENU_ITEM(help_item), help_menu);
+
   gtk_menu_shell_append(GTK_MENU_SHELL(file_menu), file_quit);
   gtk_menu_shell_append(GTK_MENU_SHELL(menubar), file);
+
+  gtk_menu_shell_append(GTK_MENU_SHELL(help_menu), help_about);
+  gtk_menu_shell_append(GTK_MENU_SHELL(menubar), help_item);
+
   gtk_box_pack_start(GTK_BOX(vbox), menubar, FALSE, FALSE, 0);
   /* Create a vertical box with buttons */
   fixed = gtk_fixed_new ();
@@ -122,6 +159,8 @@ int main (int argc, char *argv[])
   gtk_fixed_put(GTK_FIXED(fixed),bt_calc, 200 ,40);
   gtk_widget_set_size_request(bt_calc, 90, 30);
 
+  g_signal_connect_swapped(G_OBJECT(help_about), "activate", G_CALLBACK(about_show), NULL);
+  g_signal_connect_swapped(G_OBJECT(file_quit), "activate", G_CALLBACK(gtk_main_quit), NULL);
   /* Enter the main loop */
   gtk_widget_show_all (win);
   gtk_main ();
